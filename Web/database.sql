@@ -1,0 +1,1 @@
+SELECT * FROM elderly_care.sensor_data;

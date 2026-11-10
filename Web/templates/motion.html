@@ -1,0 +1,207 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        overflow-x: hidden;
+        min-height: 100vh;
+        background: #0a1a2a;
+    }
+
+    .fullscreen-bg {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url("{{ url_for('static', filename='images/background.jpg') }}");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        filter: blur(1px) hue-rotate(56deg);
+        transform: scale(1.02);
+        z-index: 0;
+    }
+
+    .soft-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.3);
+        z-index: 1;
+        pointer-events: none;
+    }
+
+    .main-content {
+        position: relative;
+        z-index: 1;
+        background: transparent;
+        min-height: 100vh;
+        width: 100vw;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 2rem;
+    }
+
+    .dashboard-container {
+        width: 100%;
+        max-width: 800px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    /* Welcome Header */
+    .welcome-section {
+        margin-bottom: 2rem;
+        text-align: center;
+    }
+
+    .welcome-section h1 {
+        color: white;
+        font-size: 1.8rem;
+        font-weight: 600;
+        margin-bottom: 0.25rem;
+    }
+
+    .welcome-section p {
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 0.9rem;
+    }
+
+    /* Glass Display Card */
+    .glass-display-card {
+        width: 100%;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 28px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        padding: 2rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .table-viewport-box {
+        width: 100%;
+        max-height: 420px;
+        overflow-y: auto;
+        margin: 1rem auto;
+        border-radius: 20px;
+        background: rgba(12, 16, 20, 0.4);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+        color: white !important;
+        text-align: left;
+    }
+
+    .table th, .table td {
+        padding: 1rem 1.5rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .table th {
+        background: rgba(255, 255, 255, 0.05);
+        font-weight: 600;
+        font-size: 0.9rem;
+        letter-spacing: 0.5px;
+    }
+
+    .table td {
+        font-size: 0.85rem;
+    }
+
+    .status-detected {
+        color: #ff4d4d;
+        font-weight: bold;
+        background: rgba(255, 77, 77, 0.15);
+        padding: 0.25rem 0.6rem;
+        border-radius: 12px;
+        border: 1px solid rgba(255, 77, 77, 0.2);
+    }
+
+    .status-clear {
+        color: #a3e4c4;
+        background: rgba(163, 228, 196, 0.15);
+        padding: 0.25rem 0.6rem;
+        border-radius: 12px;
+        border: 1px solid rgba(163, 228, 196, 0.2);
+    }
+
+    .dashboard-return-link-container {
+        text-align: center;
+        margin-top: 1rem;
+    }
+
+    .dashboard-return-link {
+        display: inline-block;
+        color: #7fb3d5;
+        text-decoration: none;
+        font-size: 0.9rem;
+        font-weight: 500;
+        transition: color 0.2s ease;
+    }
+
+    .dashboard-return-link:hover {
+        color: white;
+    }
+</style>
+
+<div class="fullscreen-bg"></div>
+<div class="soft-overlay"></div>
+
+<div class="main-content">
+    <div class="dashboard-container">
+        <div class="welcome-section">
+            <h1>MOTION SENSOR LOGS</h1>
+            <p>Historical movement telemetry data recorded from the PIR hardware module.</p>
+        </div>
+
+        <div class="glass-display-card">
+            <div class="table-viewport-box">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Date & Time</th>
+                            <th>Status State</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in data %}
+                        <tr>
+                            <td>{{ row.timestamp }}</td>
+                            <td>
+                                {% if row.motion == 1 %}
+                                    <span class="status-detected">MOTION DETECTED</span>
+                                {% else %}
+                                    <span class="status-clear">Clear</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="dashboard-return-link-container">
+                <a href="/dashboard" class="dashboard-return-link">← Back to Dashboard</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

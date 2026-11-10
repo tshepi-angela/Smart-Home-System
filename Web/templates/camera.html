@@ -1,0 +1,214 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body, html {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        overflow-x: hidden;
+        background: #0a1a2a;
+    }
+
+    /* Master Background Sync Layer */
+    .fullscreen-bg {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url("{{ url_for('static', filename='images/background.jpg') }}");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        filter: blur(1px) hue-rotate(56deg);
+        transform: scale(1.02);
+        z-index: 0;
+    }
+
+    .soft-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.3);
+        z-index: 1;
+        pointer-events: none;
+    }
+
+    /* Absolute Center Wrapper Layer */
+    .main-content {
+        position: relative;
+        z-index: 2;
+        background: transparent;
+        width: 100vw;
+        height: 100vh;
+        display: flex; /* Enables flex box alignment rules */
+        justify-content: center; /* Centers elements perfectly along the horizontal axis */
+        align-items: center; /* Centers elements perfectly along the vertical axis */
+        padding: 2rem;
+    }
+
+    /* Symmetrical Container Structure */
+    .dashboard-container {
+        width: 100%;
+        max-width: 750px; 
+        display: flex;
+        flex-direction: column;
+        align-items: center; 
+    }
+
+    /* Header Design Styles */
+    .welcome-section {
+        margin-bottom: 1.5rem;
+        text-align: center; 
+    }
+
+    .welcome-section h1 {
+        color: white;
+        font-size: 1.8rem;
+        font-weight: 600;
+        margin-bottom: 0.25rem;
+        letter-spacing: 0.5px;
+    }
+
+    .welcome-section p {
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 0.9rem;
+    }
+
+    /* Pure Glassmorphism Card Frame */
+    .glass-display-card {
+        width: 100%;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-radius: 28px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        overflow: hidden;
+        padding: 2.5rem;
+        text-align: center;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+        display: flex;
+        flex-direction: column;
+        align-items: center; 
+    }
+
+    /* Video Frame Bounding Box */
+    .stream-viewport-box {
+        position: relative;
+        width: 100%;
+        max-width: 640px;
+        min-height: 480px; 
+        margin: 1.5rem auto;
+        border-radius: 20px;
+        background: #0c1014;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: inset 0 0 20px rgba(0,0,0,0.6), 
+                    0 10px 30px rgba(0,0,0,0.5);
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .stream-element {
+        display: block;
+        width: 100%;
+        height: auto;
+        max-height: 480px;
+        object-fit: contain;
+    }
+
+    /* Sync Pulse Badge Layer Styles */
+    .badge-status-row {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 1.2rem;
+    }
+
+    .badge-ui-pill {
+        display: inline-flex;
+        align-items: center;
+        background: rgba(52, 152, 219, 0.25);
+        color: #7fb3d5;
+        padding: 0.3rem 0.9rem;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 0.05rem;
+        border: 1px solid rgba(52, 152, 219, 0.2);
+    }
+
+    .badge-pulse-node {
+        width: 6px;
+        height: 6px;
+        background-color: #7fb3d5;
+        border-radius: 50%;
+        margin-right: 8px;
+        animation: linkPulse 2s infinite;
+    }
+
+    @keyframes linkPulse {
+        0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(127, 179, 213, 0.6); }
+        70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(127, 179, 213, 0); }
+        100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(127, 179, 213, 0); }
+    }
+
+    /* Return Dashboard Action Link Element */
+    .dashboard-return-link {
+        display: inline-block;
+        color: rgba(255, 255, 255, 0.6);
+        text-decoration: none;
+        font-size: 0.85rem;
+        font-weight: 500;
+        margin-top: 1rem;
+        transition: color 0.2s ease;
+    }
+
+    .dashboard-return-link:hover {
+        color: #ffffff;
+    }
+</style>
+
+<div class="fullscreen-bg"></div>
+<div class="soft-overlay"></div>
+
+<div class="main-content">
+    <div class="dashboard-container">
+        
+        <div class="welcome-section">
+            <h1>LIVE CAMERA STREAM</h1>
+            <p>Room Monitoring Area — Continuous Hardware Node Video Link</p>
+        </div>
+
+        <div class="glass-display-card">
+            
+            <div class="badge-status-row">
+                <div class="badge-ui-pill">
+                    <span class="badge-pulse-node"></span>
+                    Active Stream Channel
+                </div>
+            </div>
+
+            <div class="stream-viewport-box">
+                <img class="stream-element" src="{{ url_for('video_feed') }}" alt="Opening live streaming hardware pipe view...">
+            </div>
+
+            <div>
+                <a href="/dashboard" class="dashboard-return-link">← Return to System Dashboard</a>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+{% endblock %}

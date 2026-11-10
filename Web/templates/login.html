@@ -1,0 +1,220 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        overflow: hidden;
+        height: 100vh;
+        
+    }
+
+    .fullscreen-bg {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url("{{ url_for('static', filename='images/index.jpg') }}");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        filter: blur(0.25rem);
+        filter: hue-rotate(72);
+        transform: scale(1.02);
+        z-index: 0;
+    }
+
+    .soft-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.2);
+        z-index: 1;
+        pointer-events: none;
+    }
+
+    .center-wrapper {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 2;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        pointer-events: none;
+    }
+
+    .glass-card {
+        background: rgba(255, 255, 255, 0.28);
+        backdrop-filter: blur(14px);
+        border-radius: 48px;
+        padding: 2rem;
+        width: 100%;
+        max-width: 440px;
+        margin: 0 20px;
+        border: 1px solid rgba(255, 255, 255, 0.45);
+        box-shadow: 0 25px 45px rgba(0, 0, 0, 0.2);
+        pointer-events: auto;
+    }
+
+    .glass-card h1 {
+        color: white;
+        font-weight: 600;
+        text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        font-size: 2rem;
+        margin-bottom: 1.5rem;
+        text-align: center;
+    }
+
+    .form-floating {
+        margin-bottom: 1rem;
+        position: relative;
+    }
+
+    .form-control {
+        width: 100%;
+        background: rgba(255, 255, 255, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        border-radius: 60px;
+        padding: 1rem 1.2rem;
+        font-size: 1rem;
+        color: white;
+        outline: none;
+    }
+
+    .form-control:focus {
+        background: rgba(255, 255, 255, 0.3);
+        border-color: white;
+        box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.25);
+    }
+
+    .form-floating label {
+        position: absolute;
+        left: 1.2rem;
+        top: 1rem;
+        color: rgba(255, 255, 255, 0.7);
+        pointer-events: none;
+        transition: 0.2s;
+        font-size: 1rem;
+    }
+
+    .form-control:focus ~ label,
+    .form-control:not(:placeholder-shown) ~ label {
+        top: -0.5rem;
+        left: 1rem;
+        font-size: 0.75rem;
+        background: rgba(0, 0, 0, 0.5);
+        padding: 0 8px;
+        border-radius: 20px;
+        color: white;
+    }
+
+    .form-check {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin: 1.2rem 0;
+    }
+
+    .form-check-input {
+        width: 18px;
+        height: 18px;
+        accent-color: #ffffff;
+        cursor: pointer;
+    }
+
+    .form-check-label {
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 0.85rem;
+        cursor: pointer;
+    }
+
+    .btn-primary {
+        width: 100%;
+        background: rgba(255, 255, 255, 0.92);
+        border: none;
+        padding: 0.8rem;
+        border-radius: 60px;
+        font-weight: 600;
+        font-size: 1rem;
+        color: #1a2a3f;
+        cursor: pointer;
+        transition: 0.2s;
+        margin-top: 0.5rem;
+    }
+
+    .btn-primary:hover {
+        background: white;
+        transform: scale(0.98);
+    }
+
+    .text-body-secondary {
+        text-align: center;
+        margin-top: 1.5rem;
+        font-size: 0.85rem;
+        color: rgba(255, 255, 255, 0.8);
+    }
+
+    .text-body-secondary a {
+        color: white;
+        font-weight: 500;
+        text-decoration: none;
+        border-bottom: 1px solid rgba(255,255,255,0.5);
+    }
+
+    .text-body-secondary a:hover {
+        border-bottom-color: white;
+    }
+
+    
+</style>
+
+<div class="fullscreen-bg"></div>
+<div class="soft-overlay"></div>
+
+<div class="center-wrapper">
+    <div class="glass-card">
+        <main class="form-signin w-100">
+            <form method="post" action="/login">
+                <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
+                
+                <div class="form-floating">
+                    <input type="email" class="form-control" name="email" id="floatingInput"
+                        placeholder=" ">
+                    <label for="floatingInput">Email address</label>
+                </div>
+                
+                <div class="form-floating">
+                    <input type="password" class="form-control" name="password" id="floatingPassword"
+                        placeholder=" ">
+                    <label for="floatingPassword">Password</label>
+                </div>
+                
+                <div class="form-check text-start my-3">
+                    <input class="form-check-input" type="checkbox" value="remember-me" id="checkDefault">
+                    <label class="form-check-label" for="checkDefault">
+                        Remember me
+                    </label>
+                </div>
+                
+                <button class="btn btn-primary w-100 py-2" type="submit"> Login</button>
+                
+                <p class="mt-5 mb-3 text-body-secondary">Don't have an account? <a href="/signup">Sign Up here</a></p>
+                <p class="mt-5 mb-3 text-body-secondary">© 2026</p>
+            </form>
+        </main>
+    </div>
+</div>
+
+{% endblock %}
